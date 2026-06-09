@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0e1a;
+  --bg2: #0f1628;
+  --bg3: #151d35;
+  --accent: #00e5ff;
+  --accent2: #39ff85;
+  --accent3: #7b61ff;
+  --text: #e8f0fe;
+  --muted: #8899bb;
+  --border: rgba(0, 229, 255, 0.15);
+  --card: rgba(255, 255, 255, 0.03);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(0, 229, 255, 0.2);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.4);
+  border-radius: 2px;
+}
+
+/* Grid bg utility */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Section label pseudo — used via data attribute to avoid before: issues in Tailwind */
+.section-label::before {
+  content: "// ";
+  opacity: 0.5;
+}
