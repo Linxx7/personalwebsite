@@ -256,7 +256,7 @@ export default function Hero() {
           >
             {STATS.map((s) => (
               <div key={s.label}>
-                <StatCounter num={s.num} prefix={"prefix" in s ? s.prefix : ""} suffix={s.suffix} />
+                <StatCounter num={s.num} prefix="" suffix={s.suffix} />
                 <p className="font-mono text-[11px] text-[#8899bb] tracking-wider mt-1">{s.label}</p>
               </div>
             ))}
