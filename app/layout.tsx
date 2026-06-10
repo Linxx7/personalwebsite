@@ -139,7 +139,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#0a0e1a] text-[#e8f0fe] font-sans antialiased">
+      <body className="bg-[#0a0e1a] text-[#e8f0fe] font-sans antialiased" suppressHydrationWarning>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-BWECP6KF1V"
           strategy="afterInteractive"

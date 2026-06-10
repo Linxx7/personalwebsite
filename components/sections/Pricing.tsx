@@ -88,7 +88,7 @@ export default function Pricing() {
             <span className="text-[#39ff85]">{"// nota"}</span>
             {"  "}
             Preços em BRL · PIX, transferência ou contrato PJ ·
-            Projetos internacionais cotados em USD (a partir de $30/h) ·{" "}
+            Projetos internacionais cotados em USD (consulte) ·{" "}
             <span className="text-[#e8f0fe]">10% de desconto</span> para ONGs e projetos de impacto social.
           </p>
         </div>
