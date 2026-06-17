@@ -143,6 +143,7 @@ export type ProjectItem = {
   category: "web" | "game";
   tech: string[];
   image: string;
+  images?: string[];
   year: string;
   github?: string;
   demo?: string;
@@ -209,10 +210,11 @@ export const PROJECTS: ProjectItem[] = [
   {
     title: "Super Rosana & Bacelar",
     description:
-      "Jogos mobile com foco em inclusão social e combate a fake news, usando mecânicas de RPG e quiz para sensibilizar sobre cidadania e pensamento crítico. Implantados em Salvador/BA e Paracatu/MG.",
+      "Jogos mobile estilo infinity run com foco em inclusão social e combate a fake news. O jogador acumula pontos aprendendo sobre a campanha de cada candidato. Implantados em Salvador/BA e Paracatu/MG.",
     category: "game",
     tech: ["Unity", "C#", "Mobile", "Game Design"],
     image: "/projects/bacelar-rosana.png",
+    images: ["/projects/super-rosana.png", "/projects/bacelar-rosana.png"],
     year: "2021–2022",
   },
 ];

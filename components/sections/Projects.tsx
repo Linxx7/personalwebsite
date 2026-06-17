@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import RevealOnScroll from "@/components/animations/RevealOnScroll";
 import { PROJECTS, type ProjectItem } from "@/lib/constants";
@@ -31,6 +31,14 @@ const CATEGORY_STYLE = {
 function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
   const style = CATEGORY_STYLE[project.category];
   const [imgError, setImgError] = useState(false);
+  const slides = project.images ?? [project.image];
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const id = setInterval(() => setSlideIndex((i) => (i + 1) % slides.length), 3000);
+    return () => clearInterval(id);
+  }, [slides.length]);
 
   return (
     <motion.div
@@ -63,9 +71,11 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           {/* Project image */}
           {!imgError && (
             <img
-              src={project.image}
+              key={slides[slideIndex]}
+              src={slides[slideIndex]}
               alt=""
               className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+              style={{ animation: slides.length > 1 ? "fadeIn 0.6s ease" : undefined }}
               onError={() => setImgError(true)}
             />
           )}

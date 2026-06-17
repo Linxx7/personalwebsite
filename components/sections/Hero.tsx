@@ -161,32 +161,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex flex-col items-start gap-3 mb-7"
+            className="flex items-center gap-2 mb-7"
           >
-            {/* Circular photo */}
-            <div className="relative">
-              <div
-                className="absolute -inset-[3px] rounded-full"
-                style={{ background: "linear-gradient(135deg, #00e5ff, #7b61ff, #39ff85)" }}
-              />
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-[3px] border-[#0a0e1a]">
-                <img
-                  src="/fotoperfil.jpg"
-                  alt="Ricardo Duarte"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              {/* Glow */}
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-4 rounded-full blur-xl bg-[rgba(0,229,255,0.25)]" />
-            </div>
-
-            {/* Available badge */}
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#39ff85] animate-pulse" />
-              <span className="font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase">
-                disponível para projetos
-              </span>
-            </div>
+            <span className="w-2 h-2 rounded-full bg-[#39ff85] animate-pulse" />
+            <span className="font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase">
+              disponível para projetos
+            </span>
           </motion.div>
 
           {/* Heading */}

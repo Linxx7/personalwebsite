@@ -35,7 +35,8 @@ export default function Header() {
       >
         <Link
           href="/"
-          className="font-mono text-[13px] text-[#00e5ff] tracking-[0.12em] hover:text-white transition-colors"
+          className="font-mono text-[16px] font-bold text-[#00e5ff] tracking-[0.12em] hover:text-white transition-colors"
+          style={{ textShadow: "0 0 18px rgba(0,229,255,0.5)" }}
         >
           ricardo.dev
         </Link>
