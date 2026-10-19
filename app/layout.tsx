@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Syne, JetBrains_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import MotionProvider from "@/components/animations/MotionProvider";
+import AnalyticsConsent from "@/components/privacy/AnalyticsConsent";
+import { SITE_URL } from "@/lib/site";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -18,9 +20,6 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "700"],
   display: "swap",
 });
-
-// Troque pela URL definitiva quando tiver o domínio
-const SITE_URL = "https://ricardoduarte.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -53,10 +52,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  icons: {
-    icon: [{ url: "/favicon.png" }, { url: "/favicon.svg" }],
-    shortcut: "/favicon.png",
-  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
@@ -67,7 +62,7 @@ export const metadata: Metadata = {
       "Desenvolvedor Full Stack em Brasília especializado em React, Node.js e TypeScript. +5 anos de experiência. Disponível para projetos, freela e retainer.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Ricardo Duarte – Desenvolvedor Full Stack Brasília",
@@ -79,7 +74,7 @@ export const metadata: Metadata = {
     title: "Ricardo Duarte · Desenvolvedor Full Stack Brasília",
     description:
       "Desenvolvedor Full Stack em Brasília especializado em React, Node.js e TypeScript. +5 anos de experiência. Disponível para projetos.",
-    images: ["/og-image.jpg"],
+    images: ["/opengraph-image"],
   },
 };
 
@@ -140,21 +135,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-[#0a0e1a] text-[#e8f0fe] font-sans antialiased" suppressHydrationWarning>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-BWECP6KF1V"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-BWECP6KF1V');
-          `}
-        </Script>
-        <Header />
-        {children}
-        <Footer />
+        <MotionProvider>
+          <a
+            href="#main-content"
+            className="fixed left-4 top-4 z-[100] -translate-y-24 bg-[#00e5ff] px-4 py-2 font-mono text-sm font-bold text-[#0a0e1a] focus:translate-y-0"
+          >
+            Pular para o conteúdo
+          </a>
+          <Header />
+          {children}
+          <Footer />
+          <AnalyticsConsent />
+        </MotionProvider>
       </body>
     </html>
   );

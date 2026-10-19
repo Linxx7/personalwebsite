@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { NAV_LINKS } from "@/lib/constants";
@@ -8,6 +8,8 @@ import { NAV_LINKS } from "@/lib/constants";
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -21,10 +23,44 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const menu = mobileMenuRef.current;
+    const focusable = menu?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    const focusFrame = requestAnimationFrame(() => first?.focus());
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        requestAnimationFrame(() => menuButtonRef.current?.focus());
+        return;
+      }
+
+      if (event.key !== "Tab" || !first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      cancelAnimationFrame(focusFrame);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   return (
     <>
       <motion.header
-        initial={{ y: -80, opacity: 0 }}
+        initial={false}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 md:px-12 py-4 transition-all duration-300 ${
@@ -38,11 +74,11 @@ export default function Header() {
           className="font-mono text-[16px] font-bold text-[#00e5ff] tracking-[0.12em] hover:text-white transition-colors"
           style={{ textShadow: "0 0 18px rgba(0,229,255,0.5)" }}
         >
-          ricardo.dev
+          ricardo.dev.br
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav aria-label="Navegação principal" className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -62,21 +98,27 @@ export default function Header() {
 
         {/* Mobile hamburger */}
         <button
+          ref={menuButtonRef}
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden flex flex-col justify-center gap-[5px] w-8 h-8 p-1"
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           <motion.span
+            aria-hidden="true"
             animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="block h-[1.5px] w-full bg-[#00e5ff] origin-center"
           />
           <motion.span
+            aria-hidden="true"
             animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
             transition={{ duration: 0.2 }}
             className="block h-[1.5px] w-full bg-[#00e5ff]"
           />
           <motion.span
+            aria-hidden="true"
             animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="block h-[1.5px] w-full bg-[#00e5ff] origin-center"
@@ -88,13 +130,18 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            ref={mobileMenuRef}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu de navegação"
             initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col justify-center items-center bg-[rgba(10,14,26,0.98)] backdrop-blur-2xl"
           >
-            <nav className="flex flex-col items-center gap-8">
+            <nav aria-label="Navegação mobile" className="flex flex-col items-center gap-8">
               {NAV_LINKS.map((link, i) => (
                 <motion.div
                   key={link.href}

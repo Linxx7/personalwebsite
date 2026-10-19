@@ -7,10 +7,10 @@ import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <Hero />
-      <Skills />
       <Projects />
+      <Skills />
       <Experience />
       <Pricing />
       <Contact />

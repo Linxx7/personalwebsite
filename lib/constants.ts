@@ -1,9 +1,8 @@
 export const NAV_LINKS = [
-  { href: "#skills", label: "skills" },
   { href: "#projects", label: "projetos" },
+  { href: "#skills", label: "skills" },
   { href: "#experience", label: "experiência" },
   { href: "#pricing", label: "preços" },
-  { href: "#contact", label: "contato" },
 ] as const;
 
 export const STATS = [
@@ -148,6 +147,11 @@ export type ProjectItem = {
   github?: string;
   demo?: string;
   highlight?: string;
+  caseStudy?: {
+    context: string;
+    delivery: string;
+    evidence: string;
+  };
 };
 
 export const PROJECTS: ProjectItem[] = [
@@ -160,6 +164,14 @@ export const PROJECTS: ProjectItem[] = [
     image: "/projects/salao-tininha.jpg",
     year: "2026",
     demo: "https://salaotininha.com.br/",
+    caseStudy: {
+      context:
+        "Apresentar os serviços do salão e concentrar o agendamento em uma experiência responsiva.",
+      delivery:
+        "Site em Next.js e TypeScript, conteúdo gerenciado com Sanity e integrações com Cal.com, Resend e WhatsApp.",
+      evidence:
+        "Site publicado com portfólio de serviços e fluxo de agendamento online.",
+    },
   },
   {
     title: "Lufe Mídias",
@@ -178,6 +190,14 @@ export const PROJECTS: ProjectItem[] = [
     tech: ["React", "TypeScript", "Node.js", "WebSockets", "MongoDB", "AWS"],
     image: "/projects/hive-social.jpg",
     year: "2025–2026",
+    caseStudy: {
+      context:
+        "Reunir experiência de rede social, automações e dados de engajamento em uma plataforma proprietária.",
+      delivery:
+        "Frontend em React e TypeScript, APIs Node.js, comunicação em tempo real, MongoDB e infraestrutura AWS.",
+      evidence:
+        "Plataforma em produção com cerca de 200 usuários ativos e dashboards analíticos.",
+    },
   },
   {
     title: "Robótica Terrestre",
@@ -188,6 +208,14 @@ export const PROJECTS: ProjectItem[] = [
     image: "/projects/robotica-terrestre.png",
     year: "2022–2023",
     highlight: "Campus Party Brasília 2023",
+    caseStudy: {
+      context:
+        "Ensinar robótica e programação de forma acessível para estudantes do ensino fundamental.",
+      delivery:
+        "Jogo educativo 3D desenvolvido em Unity e C#, com game design orientado ao aprendizado.",
+      evidence:
+        "Apresentado na Campus Party Brasília 2023 e implantado em escolas públicas.",
+    },
   },
   {
     title: "ENEM Game",

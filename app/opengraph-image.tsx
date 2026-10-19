@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "edge";
 export const alt = "Ricardo Duarte – Desenvolvedor Full Stack Brasília";
@@ -149,7 +150,7 @@ export default function Image() {
             margin: 0,
           }}
         >
-          ricardoduarte.dev
+          {SITE_URL.replace(/^https:\/\//, "")}
         </p>
       </div>
     ),

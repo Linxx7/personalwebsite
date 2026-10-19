@@ -5,7 +5,11 @@ import Button from "@/components/ui/Button";
 
 export default function NotFound() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden"
+    >
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg pointer-events-none opacity-50" />
 
@@ -18,7 +22,7 @@ export default function NotFound() {
       <div className="relative flex flex-col items-center text-center gap-6">
         {/* 404 */}
         <motion.p
-          initial={{ opacity: 0, y: -20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase"
@@ -27,7 +31,7 @@ export default function NotFound() {
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={false}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-sans font-extrabold text-[clamp(6rem,20vw,12rem)] leading-none tracking-tight text-[#00e5ff]"
@@ -37,7 +41,7 @@ export default function NotFound() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
           className="font-mono text-[13px] text-[#8899bb] max-w-[340px] leading-[1.85]"
@@ -48,7 +52,7 @@ export default function NotFound() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
@@ -57,6 +61,6 @@ export default function NotFound() {
           </Button>
         </motion.div>
       </div>
-    </section>
+    </main>
   );
 }

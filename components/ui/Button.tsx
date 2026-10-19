@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface ButtonProps {
@@ -34,6 +34,7 @@ export default function Button({
   target,
   download,
 }: ButtonProps) {
+  const shouldReduceMotion = useReducedMotion();
   const cls = `${base} ${variants[variant]} ${className}`;
 
   if (href) {
@@ -43,8 +44,8 @@ export default function Button({
         target={target}
         download={download}
         rel={target === "_blank" ? "noopener noreferrer" : undefined}
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.97 }}
+        whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
         className={cls}
       >
         {children}
@@ -57,8 +58,8 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      whileHover={{ y: disabled ? 0 : -2 }}
-      whileTap={{ scale: disabled ? 1 : 0.97 }}
+      whileHover={shouldReduceMotion ? undefined : { y: disabled ? 0 : -2 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: disabled ? 1 : 0.97 }}
       className={`${cls} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       {children}

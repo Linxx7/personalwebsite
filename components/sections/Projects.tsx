@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import RevealOnScroll from "@/components/animations/RevealOnScroll";
 import { PROJECTS, type ProjectItem } from "@/lib/constants";
 
@@ -29,24 +30,22 @@ const CATEGORY_STYLE = {
 };
 
 function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
+  const shouldReduceMotion = useReducedMotion();
   const style = CATEGORY_STYLE[project.category];
   const [imgError, setImgError] = useState(false);
   const slides = project.images ?? [project.image];
   const [slideIndex, setSlideIndex] = useState(0);
 
-  useEffect(() => {
-    if (slides.length <= 1) return;
-    const id = setInterval(() => setSlideIndex((i) => (i + 1) % slides.length), 3000);
-    return () => clearInterval(id);
-  }, [slides.length]);
-
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 1, y: shouldReduceMotion ? 0 : 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10, scale: 0.97 }}
-      transition={{ duration: 0.28, delay: index * 0.06 }}
+      exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -10, scale: 0.97 }}
+      transition={{
+        duration: shouldReduceMotion ? 0 : 0.28,
+        delay: shouldReduceMotion ? 0 : index * 0.06,
+      }}
     >
       <div
         className="group relative flex flex-col h-full rounded-xl border border-white/5 bg-[#0f1628] overflow-hidden transition-all duration-300 hover:border-white/10"
@@ -70,10 +69,12 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
 
           {/* Project image */}
           {!imgError && (
-            <img
+            <Image
               key={slides[slideIndex]}
               src={slides[slideIndex]}
-              alt=""
+              alt={`Captura do projeto ${project.title}`}
+              fill
+              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
               className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
               style={{ animation: slides.length > 1 ? "fadeIn 0.6s ease" : undefined }}
               onError={() => setImgError(true)}
@@ -101,6 +102,30 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
               ★ {project.highlight}
             </span>
           )}
+
+          {slides.length > 1 && (
+            <div
+              className="absolute bottom-3 right-3 z-10 flex gap-2"
+              role="group"
+              aria-label={`Imagens do projeto ${project.title}`}
+            >
+              {slides.map((slide, slidePosition) => (
+                <button
+                  key={slide}
+                  type="button"
+                  onClick={() => {
+                    setImgError(false);
+                    setSlideIndex(slidePosition);
+                  }}
+                  aria-label={`Mostrar imagem ${slidePosition + 1} de ${slides.length}`}
+                  aria-pressed={slideIndex === slidePosition}
+                  className={`h-2.5 w-2.5 rounded-full border border-[#e8f0fe]/70 transition-colors ${
+                    slideIndex === slidePosition ? "bg-[#00e5ff]" : "bg-[#0a0e1a]/70"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -108,7 +133,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           <h3 className="font-sans font-bold text-[0.95rem] text-[#e8f0fe] leading-snug">
             {project.title}
           </h3>
-          <p className="font-sans text-[13px] text-[#8899bb] leading-[1.65] flex-1">
+          <p className="font-sans text-[14px] text-[#8899bb] leading-[1.65] flex-1">
             {project.description}
           </p>
 
@@ -123,6 +148,40 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
               </span>
             ))}
           </div>
+
+          {project.caseStudy && (
+            <details className="mt-1 border-t border-white/[0.07] pt-3">
+              <summary className="cursor-pointer list-none font-mono text-[11px] font-bold tracking-wider text-[#00e5ff] hover:text-white [&::-webkit-details-marker]:hidden">
+                Ver estudo de caso <span aria-hidden="true">＋</span>
+              </summary>
+              <dl className="mt-4 space-y-4 border-l border-[rgba(0,229,255,0.2)] pl-4">
+                <div>
+                  <dt className="font-mono text-[10px] uppercase tracking-widest text-[#39ff85]">
+                    Contexto
+                  </dt>
+                  <dd className="mt-1 font-sans text-[13px] leading-relaxed text-[#b3c0d9]">
+                    {project.caseStudy.context}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-[10px] uppercase tracking-widest text-[#39ff85]">
+                    Entrega
+                  </dt>
+                  <dd className="mt-1 font-sans text-[13px] leading-relaxed text-[#b3c0d9]">
+                    {project.caseStudy.delivery}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-[10px] uppercase tracking-widest text-[#39ff85]">
+                    Evidência
+                  </dt>
+                  <dd className="mt-1 font-sans text-[13px] leading-relaxed text-[#b3c0d9]">
+                    {project.caseStudy.evidence}
+                  </dd>
+                </div>
+              </dl>
+            </details>
+          )}
 
           {/* Links */}
           {(project.github || project.demo) && (
@@ -167,18 +226,27 @@ export default function Projects() {
         <p className="section-label font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase mb-2">
           portfólio
         </p>
-        <h2 className="font-sans font-bold text-[2rem] text-[#e8f0fe] mb-8">
+        <h2 className="font-sans font-bold text-[2rem] text-[#e8f0fe] mb-3">
           Projetos selecionados
         </h2>
+        <p className="max-w-2xl font-sans text-[15px] leading-relaxed text-[#8899bb] mb-8">
+          Produtos web e jogos que conectam engenharia, experiência de uso e objetivos reais.
+          Abra os estudos de caso para conhecer o contexto e a entrega.
+        </p>
       </RevealOnScroll>
 
       {/* Filter tabs */}
       <RevealOnScroll delay={0.1}>
-        <div className="flex gap-2 flex-wrap mb-10">
+        <div
+          className="flex gap-2 flex-wrap mb-10"
+          role="group"
+          aria-label="Filtrar projetos"
+        >
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setActive(f.key)}
+              aria-pressed={active === f.key}
               className={`px-4 py-1.5 rounded-full font-mono text-[11px] tracking-widest uppercase transition-all duration-200 border ${
                 active === f.key
                   ? "bg-[#00e5ff]/10 text-[#00e5ff] border-[#00e5ff]/40"

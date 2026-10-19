@@ -5,6 +5,10 @@ import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
 import RevealOnScroll from "@/components/animations/RevealOnScroll";
 import Button from "@/components/ui/Button";
+import {
+  CONTACT_LAST_SENT_KEY,
+  getContactBlockReason,
+} from "@/lib/client-protection.mjs";
 
 const EJS_SERVICE  = "service_men6kf8";
 const EJS_TEMPLATE = "template_tr0icia";
@@ -31,20 +35,51 @@ const PROJECT_TYPES = [
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+const DEFAULT_ERROR = "Não foi possível enviar agora. Tente novamente ou use o e-mail ou telefone ao lado.";
+
 const inputBase =
   "w-full bg-[#151d35] border border-[rgba(0,229,255,0.15)] text-[#e8f0fe] px-4 py-3 font-mono text-[13px] outline-none focus:border-[#00e5ff] transition-colors duration-200 placeholder:text-[#8899bb]";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const now = Date.now();
+    const lastSubmittedAt = Number.parseInt(
+      window.localStorage.getItem(CONTACT_LAST_SENT_KEY) ?? "0",
+      10,
+    );
+    const blockReason = getContactBlockReason({
+      honeypot: String(formData.get("website") ?? ""),
+      lastSubmittedAt,
+      now,
+    });
+
+    if (blockReason === "spam") {
+      form.reset();
+      setStatus("sent");
+      return;
+    }
+
+    if (blockReason === "cooldown") {
+      setErrorMessage("Aguarde um minuto antes de enviar outra mensagem.");
+      setStatus("error");
+      return;
+    }
+
     setStatus("sending");
     try {
-      await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, formRef.current!, EJS_KEY);
+      await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, form, EJS_KEY);
+      window.localStorage.setItem(CONTACT_LAST_SENT_KEY, String(now));
+      form.reset();
       setStatus("sent");
     } catch {
+      setErrorMessage(DEFAULT_ERROR);
       setStatus("error");
     }
   }
@@ -104,6 +139,7 @@ export default function Contact() {
             {status === "error" ? (
               <motion.div
                 key="error"
+                role="alert"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col items-center justify-center gap-4 py-16 border border-[rgba(255,80,80,0.25)] bg-[rgba(255,80,80,0.03)]"
@@ -111,10 +147,13 @@ export default function Contact() {
                 <span className="text-red-400 text-4xl">✕</span>
                 <p className="font-sans font-bold text-[#e8f0fe] text-lg">Erro ao enviar</p>
                 <p className="font-mono text-[12px] text-[#8899bb] text-center">
-                  Tente novamente ou me chame pelo WhatsApp.
+                  {errorMessage}
                 </p>
                 <button
-                  onClick={() => setStatus("idle")}
+                  onClick={() => {
+                    setErrorMessage(DEFAULT_ERROR);
+                    setStatus("idle");
+                  }}
                   className="font-mono text-[11px] text-[#00e5ff] hover:underline mt-2 tracking-wider"
                 >
                   Tentar novamente
@@ -123,6 +162,8 @@ export default function Contact() {
             ) : status === "sent" ? (
               <motion.div
                 key="success"
+                role="status"
+                aria-live="polite"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex flex-col items-center justify-center gap-4 py-16 border border-[rgba(57,255,133,0.25)] bg-[rgba(57,255,133,0.03)]"
@@ -144,10 +185,25 @@ export default function Contact() {
                 key="form"
                 ref={formRef}
                 onSubmit={handleSubmit}
+                aria-busy={status === "sending"}
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="flex flex-col gap-4"
               >
+                <div
+                  aria-hidden="true"
+                  className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
+                >
+                  <label htmlFor="contact-website">Não preencha este campo</label>
+                  <input
+                    id="contact-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div>
                   <label htmlFor="contact-name" className="block font-mono text-[10px] text-[#8899bb] tracking-widest uppercase mb-1.5">
                     Nome
@@ -157,6 +213,8 @@ export default function Contact() {
                     name="name"
                     type="text"
                     required
+                    minLength={2}
+                    maxLength={80}
                     autoComplete="name"
                     placeholder="Seu nome"
                     className={inputBase}
@@ -172,6 +230,7 @@ export default function Contact() {
                     name="email"
                     type="email"
                     required
+                    maxLength={160}
                     autoComplete="email"
                     placeholder="seu@email.com"
                     className={inputBase}
@@ -208,6 +267,8 @@ export default function Contact() {
                     id="contact-message"
                     name="message"
                     required
+                    minLength={10}
+                    maxLength={2000}
                     rows={4}
                     placeholder="Conte sobre seu projeto..."
                     className={`${inputBase} resize-y min-h-[100px]`}

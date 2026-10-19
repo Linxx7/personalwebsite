@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
+import { useEffect } from "react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import Button from "@/components/ui/Button";
 import { STATS } from "@/lib/constants";
 
-/* ─── Animated stat counter ─────────────────────────────────── */
 function StatCounter({
   num,
   prefix = "",
@@ -15,32 +20,16 @@ function StatCounter({
   prefix?: string;
   suffix?: string;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    const duration = 1400;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(eased * num));
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [isInView, num]);
-
   return (
-    <span ref={ref} className="text-[2.2rem] font-extrabold text-[#39ff85] leading-none tabular-nums">
-      {prefix}{display}{suffix}
+    <span className="text-[2.2rem] font-extrabold text-[#39ff85] leading-none tabular-nums">
+      {prefix}{num}{suffix}
     </span>
   );
 }
 
 /* ─── Phone mockup ───────────────────────────────────────────── */
 function PhoneMockup() {
+  const shouldReduceMotion = useReducedMotion();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -50,20 +39,30 @@ function PhoneMockup() {
   const springRotateY = useSpring(rotateY, { stiffness: 70, damping: 25 });
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     const onMove = (e: MouseEvent) => {
       mouseX.set(e.clientX - window.innerWidth / 2);
       mouseY.set(e.clientY - window.innerHeight / 2);
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, shouldReduceMotion]);
 
   return (
-    <div style={{ perspective: "900px" }} className="flex justify-center items-center">
+    <div
+      aria-hidden="true"
+      style={{ perspective: "900px" }}
+      className="flex justify-center items-center"
+    >
       <motion.div
         style={{ rotateX: springRotateX, rotateY: springRotateY }}
-        animate={{ y: [0, -16, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        animate={shouldReduceMotion ? undefined : { y: [0, -16, 0] }}
+        transition={
+          shouldReduceMotion
+            ? undefined
+            : { duration: 5, repeat: Infinity, ease: "easeInOut" }
+        }
         className="relative w-[200px] h-[400px] md:w-[215px] md:h-[430px]"
       >
         <div
@@ -138,6 +137,8 @@ function PhoneMockup() {
 
 /* ─── Hero section ───────────────────────────────────────────── */
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-16 pt-24 pb-16">
       {/* Grid background */}
@@ -158,7 +159,7 @@ export default function Hero() {
         <div>
           {/* Avatar + available badge */}
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center gap-2 mb-7"
@@ -173,7 +174,7 @@ export default function Hero() {
           <h1 className="mb-6">
             <div className="overflow-hidden mb-1">
               <motion.span
-                initial={{ y: "110%" }}
+                initial={false}
                 animate={{ y: "0%" }}
                 transition={{ duration: 0.78, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
                 style={{ display: "block" }}
@@ -184,7 +185,7 @@ export default function Hero() {
             </div>
             <div className="overflow-hidden">
               <motion.span
-                initial={{ y: "110%" }}
+                initial={false}
                 animate={{ y: "0%" }}
                 transition={{ duration: 0.78, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
                 style={{ display: "block", textShadow: "0 0 40px rgba(0,229,255,0.25)" }}
@@ -197,7 +198,7 @@ export default function Hero() {
 
           {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="font-mono text-[13.5px] text-[#8899bb] max-w-[500px] mb-10 leading-[1.85]"
@@ -211,13 +212,13 @@ export default function Hero() {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.76 }}
-            className="flex gap-3 flex-wrap mb-12"
+            className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap mb-12"
           >
-            <Button href="#pricing" variant="primary">
-              ▸ Ver planos & preços
+            <Button href="#projects" variant="primary">
+              ▸ Ver projetos
             </Button>
             <Button href="#contact" variant="outline">
               ✉ Falar comigo
@@ -229,7 +230,7 @@ export default function Hero() {
 
           {/* Stats */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.95 }}
             className="flex flex-wrap gap-8 pt-6 border-t border-[rgba(0,229,255,0.12)]"
@@ -245,7 +246,7 @@ export default function Hero() {
 
         {/* ── Right: phone mockup ── */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
+          initial={false}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="hidden lg:flex justify-center"
@@ -256,15 +257,19 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
       >
         <span className="font-mono text-[10px] text-[#8899bb] tracking-widest uppercase">scroll</span>
         <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.4, repeat: Infinity }}
+          animate={shouldReduceMotion ? undefined : { y: [0, 6, 0] }}
+          transition={
+            shouldReduceMotion
+              ? undefined
+              : { duration: 1.4, repeat: Infinity }
+          }
           className="w-[1px] h-8 bg-gradient-to-b from-[rgba(0,229,255,0.5)] to-transparent"
         />
       </motion.div>
