@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Syne, JetBrains_Mono } from "next/font/google";
+﻿import type { Metadata } from "next";
+import { Syne, JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -13,6 +13,8 @@ const syne = Syne({
   weight: ["400", "600", "700", "800"],
   display: "swap",
 });
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -127,7 +129,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${syne.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${syne.variable} ${jetbrainsMono.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -151,3 +153,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+

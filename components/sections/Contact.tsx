@@ -85,12 +85,12 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+    <section id="contact" className="py-20 px-6 md:px-8 max-w-[1280px] mx-auto">
       <RevealOnScroll>
-        <p className="section-label font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase mb-2">
+        <p data-n="05" className="section-label font-mono text-[12px] font-semibold text-primary-container tracking-[0.08em] uppercase mb-2">
           vamos construir juntos
         </p>
-        <h2 className="font-sans font-bold text-[2rem] text-[#e8f0fe] mb-12">
+        <h2 className="font-sans font-bold text-[36px] leading-[44px] tracking-[-0.02em] text-text-primary mb-12">
           Contato
         </h2>
       </RevealOnScroll>

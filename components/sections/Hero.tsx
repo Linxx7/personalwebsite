@@ -1,278 +1,169 @@
 "use client";
 
-import { useEffect } from "react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import Button from "@/components/ui/Button";
+import { motion } from "framer-motion";
 import { STATS } from "@/lib/constants";
 
-function StatCounter({
-  num,
-  prefix = "",
-  suffix = "",
-}: {
-  num: number;
-  prefix?: string;
-  suffix?: string;
-}) {
+const STAT_COLORS = ["text-primary-container", "text-secondary", "text-tertiary-fixed", "text-primary"];
+
+function TerminalCard() {
   return (
-    <span className="text-[2.2rem] font-extrabold text-[#39ff85] leading-none tabular-nums">
-      {prefix}{num}{suffix}
-    </span>
-  );
-}
+    <div className="relative">
+      <div className="rounded-xl bg-surface-obsidian/90 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="px-4 py-3 bg-surface-container flex items-center justify-between">
+          <div className="flex items-center gap-2" aria-hidden="true">
+            <span className="w-3 h-3 rounded-full bg-[#93000a]/80" />
+            <span className="w-3 h-3 rounded-full bg-secondary-container/80" />
+            <span className="w-3 h-3 rounded-full bg-tertiary-container/80" />
+          </div>
+          <span className="font-mono text-[12px] text-text-muted">ricardo_profile.ts</span>
+          <span className="w-4" />
+        </div>
 
-/* ─── Phone mockup ───────────────────────────────────────────── */
-function PhoneMockup() {
-  const shouldReduceMotion = useReducedMotion();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+        <div className="p-6 font-mono text-[14px] leading-[22px] flex flex-col gap-1 bg-surface-obsidian">
+          <p className="text-text-muted">
+            <span className="text-secondary font-semibold">import</span> {"{ Architect, Gamer }"}{" "}
+            <span className="text-secondary font-semibold">from</span>{" "}
+            <span className="text-tertiary">&apos;@core/mindset&apos;</span>;
+          </p>
+          <div className="mt-1">
+            <p className="text-text-primary">
+              <span className="text-secondary font-semibold">const</span>{" "}
+              <span className="text-primary-container">engineer</span> = {"{"}
+            </p>
+            <p className="pl-4 text-text-muted">name: <span className="text-tertiary">&quot;Ricardo Duarte&quot;</span>,</p>
+            <p className="pl-4 text-text-muted">role: <span className="text-tertiary">&quot;Full Stack &amp; Game Dev&quot;</span>,</p>
+            <p className="pl-4 text-text-muted">stack: [</p>
+            <p className="pl-10 text-primary">&quot;React&quot;, &quot;TypeScript&quot;, &quot;Node.js&quot;, &quot;Unity&quot;</p>
+            <p className="pl-4 text-text-muted">],</p>
+            <p className="pl-4 text-text-muted">status: <span className="text-status-emerald">&quot;Pronto para novos desafios&quot;</span>,</p>
+            <p className="pl-4 text-text-muted">location: <span className="text-primary">&quot;Brasília - DF&quot;</span></p>
+            <p className="text-text-primary">{"};"}</p>
+          </div>
 
-  const rotateY = useTransform(mouseX, [-500, 500], [-14, 14]);
-  const rotateX = useTransform(mouseY, [-400, 400], [12, -12]);
-  const springRotateX = useSpring(rotateX, { stiffness: 70, damping: 25 });
-  const springRotateY = useSpring(rotateY, { stiffness: 70, damping: 25 });
+          <div className="mt-2 rounded bg-surface-container-low/60 p-2 flex items-center justify-between">
+            <span className="text-[13px] text-text-muted">Impacto Mensal</span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-status-emerald">
+              ↗ +23% prod throughput
+            </span>
+          </div>
 
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    const onMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX - window.innerWidth / 2);
-      mouseY.set(e.clientY - window.innerHeight / 2);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [mouseX, mouseY, shouldReduceMotion]);
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{ perspective: "900px" }}
-      className="flex justify-center items-center"
-    >
-      <motion.div
-        style={{ rotateX: springRotateX, rotateY: springRotateY }}
-        animate={shouldReduceMotion ? undefined : { y: [0, -16, 0] }}
-        transition={
-          shouldReduceMotion
-            ? undefined
-            : { duration: 5, repeat: Infinity, ease: "easeInOut" }
-        }
-        className="relative w-[200px] h-[400px] md:w-[215px] md:h-[430px]"
-      >
-        <div
-          className="absolute inset-0 rounded-[38px] overflow-hidden"
-          style={{
-            background: "#0a0e1a",
-            border: "1px solid rgba(0,229,255,0.22)",
-            boxShadow: "0 0 0 1px rgba(255,255,255,0.04) inset, 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(0,229,255,0.08)",
-          }}
-        >
-          <div className="absolute top-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-[rgba(0,229,255,0.5)] to-transparent" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[18px] bg-[#0a0e1a] rounded-b-[14px] z-20" />
-
-          <div className="absolute inset-[5px] rounded-[34px] bg-[#0c1120] overflow-hidden">
-            <div className="px-4 pt-5 pb-1.5 flex justify-between">
-              <span className="font-mono text-[8px] text-[#8899bb]">9:41</span>
-              <span className="font-mono text-[8px] text-[#8899bb]">◉◉◉</span>
+          <div className="grid grid-cols-2 gap-1 mt-1">
+            <div className="p-2 bg-surface-elevated/70 rounded flex flex-col">
+              <span className="text-[11px] font-semibold tracking-[0.08em] text-text-muted">ACTIVE USERS</span>
+              <span className="font-inter text-[16px] font-bold text-text-primary">200+ (Prod)</span>
             </div>
-
-            <div className="mx-3 p-2.5 rounded-[12px] mb-2 border border-[rgba(0,229,255,0.12)] bg-[rgba(0,229,255,0.04)]">
-              <p className="font-mono text-[7px] text-[#00e5ff] tracking-widest mb-1">{"// receita"}</p>
-              <p className="font-sans font-extrabold text-[19px] text-white leading-none">R$ 12.4k</p>
-              <p className="font-mono text-[7px] text-[#39ff85] mt-1">↑ +23% este mês</p>
-            </div>
-
-            <div className="mx-3 grid grid-cols-2 gap-1.5 mb-2">
-              <div className="p-2 rounded-[10px] border border-[rgba(57,255,133,0.1)] bg-[rgba(57,255,133,0.03)]">
-                <p className="font-mono text-[6.5px] text-[#8899bb] tracking-wider">USUÁRIOS</p>
-                <p className="font-bold text-[14px] text-[#e8f0fe]">200+</p>
-              </div>
-              <div className="p-2 rounded-[10px] border border-[rgba(123,97,255,0.1)] bg-[rgba(123,97,255,0.03)]">
-                <p className="font-mono text-[6.5px] text-[#8899bb] tracking-wider">PROJETOS</p>
-                <p className="font-bold text-[14px] text-[#e8f0fe]">4</p>
-              </div>
-            </div>
-
-            <div className="mx-3 p-2.5 rounded-[10px] border border-[rgba(123,97,255,0.12)] bg-[rgba(123,97,255,0.04)]">
-              <p className="font-mono text-[7.5px] leading-[1.7]">
-                <span className="text-[#8899bb]">const </span>
-                <span className="text-[#00e5ff]">dev</span>
-                <span className="text-[#8899bb]"> = </span>
-                <span className="text-[#39ff85]">&quot;Ricardo&quot;</span>
-              </p>
-              <p className="font-mono text-[7.5px] leading-[1.7]">
-                <span className="text-[#7b61ff]">buildWith</span>
-                <span className="text-white">(</span>
-                <span className="text-[#39ff85]">love</span>
-                <span className="text-white">)</span>
-              </p>
-            </div>
-
-            <div className="absolute bottom-3 left-0 right-0 flex justify-around px-3">
-              {["⌂", "⊞", "⌕", "◉"].map((icon, i) => (
-                <div
-                  key={i}
-                  className={`w-7 h-7 rounded-[8px] flex items-center justify-center text-[13px] ${
-                    i === 0 ? "bg-[rgba(0,229,255,0.15)] text-[#00e5ff]" : "text-[#8899bb]"
-                  }`}
-                >
-                  {icon}
-                </div>
-              ))}
+            <div className="p-2 bg-surface-elevated/70 rounded flex flex-col">
+              <span className="text-[11px] font-semibold tracking-[0.08em] text-text-muted">CODE DELIVERIES</span>
+              <span className="font-inter text-[16px] font-bold text-secondary">100% on-time</span>
             </div>
           </div>
         </div>
 
-        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-28 h-5 rounded-full blur-2xl bg-[rgba(0,229,255,0.18)]" />
-      </motion.div>
+        <div className="px-4 py-1.5 bg-surface-container-low flex items-center justify-between">
+          <span className="text-[11px] font-semibold tracking-[0.08em] text-text-muted flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-status-emerald" /> UTF-8 · Git branch: main
+          </span>
+          <span className="font-mono text-[12px] text-primary-container">ricardo.dev.br</span>
+        </div>
+      </div>
+
+      <div className="absolute -bottom-6 -left-6 bg-surface-container p-3 rounded-lg shadow-xl hidden sm:flex items-center gap-3 backdrop-blur-md">
+        <div className="w-8 h-8 rounded bg-primary/20 flex items-center justify-center text-primary-container" aria-hidden="true">
+          ✓
+        </div>
+        <div className="flex flex-col">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-text-primary">Campus Party Speaker</span>
+          <span className="font-inter text-[13px] text-text-muted">Apresentação Robótica 3D</span>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ─── Hero section ───────────────────────────────────────────── */
 export default function Hero() {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden px-6 md:px-12 lg:px-16 pt-24 pb-16">
-      {/* Grid background */}
-      <div className="absolute inset-0 grid-bg pointer-events-none opacity-70" />
+    <section className="relative overflow-hidden px-6 md:px-8 pt-32 pb-20">
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-primary-container/10 via-secondary-container/5 to-transparent blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-96 -left-32 w-96 h-96 bg-primary-container/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="absolute top-[800px] -right-32 w-96 h-96 bg-tertiary-container/5 blur-[120px] pointer-events-none rounded-full" />
 
-      {/* Glow orbs */}
-      <div
-        className="absolute top-[-80px] right-[-80px] w-[480px] h-[480px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 68%)" }}
-      />
-      <div
-        className="absolute bottom-[60px] left-[-60px] w-[320px] h-[320px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(123,97,255,0.09) 0%, transparent 68%)" }}
-      />
-
-      <div className="relative max-w-6xl mx-auto w-full grid lg:grid-cols-[1fr_360px] gap-12 lg:gap-16 items-center">
-        {/* ── Left content ── */}
-        <div>
-          {/* Avatar + available badge */}
+      <div className="relative z-10 max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div className="lg:col-span-7 flex flex-col items-start">
           <motion.div
             initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center gap-2 mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated/80 shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)] mb-6"
           >
-            <span className="w-2 h-2 rounded-full bg-[#39ff85] animate-pulse" />
-            <span className="font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase">
-              disponível para projetos
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-emerald opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-emerald" />
+            </span>
+            <span className="font-mono text-[12px] text-status-emerald tracking-wide">
+              Disponível para novos projetos · Remoto ou presencial
             </span>
           </motion.div>
 
-          {/* Heading */}
-          <h1 className="mb-6">
-            <div className="overflow-hidden mb-1">
-              <motion.span
-                initial={false}
-                animate={{ y: "0%" }}
-                transition={{ duration: 0.78, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                style={{ display: "block" }}
-                className="text-[clamp(2.8rem,6vw,5rem)] font-extrabold leading-[1.05] tracking-tight text-[#e8f0fe]"
-              >
-                Ricardo
-              </motion.span>
-            </div>
-            <div className="overflow-hidden">
-              <motion.span
-                initial={false}
-                animate={{ y: "0%" }}
-                transition={{ duration: 0.78, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                style={{ display: "block", textShadow: "0 0 40px rgba(0,229,255,0.25)" }}
-                className="text-[clamp(2.8rem,6vw,5rem)] font-extrabold leading-[1.05] tracking-tight text-[#00e5ff]"
-              >
-                Duarte.
-              </motion.span>
-            </div>
-          </h1>
+          <div className="flex flex-col mb-4">
+            <span className="font-mono text-[11px] font-semibold text-primary uppercase tracking-[0.2em] mb-1">
+              {"// Portfólio de Engenharia de Software"}
+            </span>
+            <h1 className="font-sans font-extrabold text-[44px] leading-[48px] md:text-[64px] md:leading-[72px] tracking-[-0.04em] text-text-primary">
+              Ricardo{" "}
+              <span className="bg-gradient-to-r from-primary via-primary-container to-secondary bg-clip-text text-transparent">
+                Duarte
+              </span>
+            </h1>
+            <p className="font-sans font-semibold text-[24px] leading-8 text-on-surface-variant mt-1">
+              Full Stack Developer &amp; Game Designer
+            </p>
+          </div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="font-mono text-[13.5px] text-[#8899bb] max-w-[500px] mb-10 leading-[1.85]"
-          >
-            Full Stack Developer · React · Node.js · TypeScript
-            <br />
-            Construindo aplicações escaláveis para o setor público e privado.
-            <br />
-            <span className="text-[#e8f0fe]">Inglês avançado</span> · Brasília–DF · Remoto ou presencial.
-          </motion.p>
+          <p className="font-inter text-[18px] leading-7 text-text-muted max-w-[620px] mb-10">
+            Construindo aplicações web escaláveis e produtos digitais para o setor público e privado. Especialista em{" "}
+            <span className="text-text-primary font-medium">React, Node.js e TypeScript</span>, com sólida vivência em{" "}
+            <span className="text-text-primary font-medium">Game Dev (Unity/C#)</span>. Inglês avançado · Brasília–DF.
+          </p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.76 }}
-            className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap mb-12"
-          >
-            <Button href="#projects" variant="primary">
-              ▸ Ver projetos
-            </Button>
-            <Button href="#contact" variant="outline">
+          <div className="flex flex-wrap items-center gap-4 mb-10">
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded font-inter text-[18px] font-semibold bg-gradient-to-r from-primary-container to-secondary text-surface-obsidian hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            >
+              ▶ Ver projetos selecionados
+            </a>
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded font-inter text-[18px] font-semibold bg-surface-elevated text-text-primary hover:text-primary hover:bg-surface-container-high transition-all duration-200"
+            >
               ✉ Falar comigo
-            </Button>
-            <Button href="/cv-ricardo.pdf" variant="outline" target="_blank">
-              ↓ Baixar CV
-            </Button>
-          </motion.div>
+            </a>
+            <a
+              href="/cv-ricardo.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-3 rounded font-mono text-[13px] text-text-muted hover:text-primary transition-colors"
+            >
+              [↓ Baixar CV]
+            </a>
+          </div>
 
-          {/* Stats */}
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.95 }}
-            className="flex flex-wrap gap-8 pt-6 border-t border-[rgba(0,229,255,0.12)]"
-          >
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <StatCounter num={s.num} prefix="" suffix={s.suffix} />
-                <p className="font-mono text-[11px] text-[#8899bb] tracking-wider mt-1">{s.label}</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full pt-4">
+            {STATS.map((s, i) => (
+              <div key={s.label} className="p-4 rounded bg-surface-container-low shadow-sm flex flex-col">
+                <span className={`font-sans font-extrabold text-[36px] leading-none mb-1 tabular-nums ${STAT_COLORS[i % STAT_COLORS.length]}`}>
+                  {s.num}
+                  {s.suffix}
+                </span>
+                <span className="font-mono text-[12px] uppercase text-text-muted">{s.label}</span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
-        {/* ── Right: phone mockup ── */}
-        <motion.div
-          initial={false}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden lg:flex justify-center"
-        >
-          <PhoneMockup />
-        </motion.div>
+        <div className="hidden lg:block lg:col-span-5 lg:pl-6">
+          <TerminalCard />
+        </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-      >
-        <span className="font-mono text-[10px] text-[#8899bb] tracking-widest uppercase">scroll</span>
-        <motion.div
-          animate={shouldReduceMotion ? undefined : { y: [0, 6, 0] }}
-          transition={
-            shouldReduceMotion
-              ? undefined
-              : { duration: 1.4, repeat: Infinity }
-          }
-          className="w-[1px] h-8 bg-gradient-to-b from-[rgba(0,229,255,0.5)] to-transparent"
-        />
-      </motion.div>
     </section>
   );
 }

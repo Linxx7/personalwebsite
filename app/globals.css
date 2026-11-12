@@ -66,7 +66,7 @@ body {
 
 /* Section label pseudo — used via data attribute to avoid before: issues in Tailwind */
 .section-label::before {
-  content: "// ";
+  content: attr(data-n) " // ";
   opacity: 0.5;
 }
 

@@ -11,10 +11,10 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
       <motion.div
         whileHover={{ y: -5 }}
         transition={{ duration: 0.2 }}
-        className={`relative flex flex-col h-full p-8 border overflow-hidden ${
+        className={`relative flex flex-col h-full p-8 rounded-xl overflow-hidden shadow-lg ${
           plan.featured
-            ? "border-[rgba(0,229,255,0.5)] bg-gradient-to-br from-[rgba(0,229,255,0.05)] to-[#0f1628]"
-            : "border-[rgba(0,229,255,0.12)] bg-[#0f1628]"
+            ? "ring-1 ring-primary-container/50 bg-gradient-to-br from-primary-container/10 to-surface-container-low"
+            : "bg-surface-container-low"
         }`}
       >
         {/* Featured ribbon */}
@@ -66,12 +66,12 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+    <section id="pricing" className="py-20 px-6 md:px-8 max-w-[1280px] mx-auto">
       <RevealOnScroll>
-        <p className="section-label font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase mb-2">
+        <p data-n="04" className="section-label font-mono text-[12px] font-semibold text-primary-container tracking-[0.08em] uppercase mb-2">
           investimento
         </p>
-        <h2 className="font-sans font-bold text-[2rem] text-[#e8f0fe] mb-12">
+        <h2 className="font-sans font-bold text-[36px] leading-[44px] tracking-[-0.02em] text-text-primary mb-12">
           Planos & Preços
         </h2>
       </RevealOnScroll>
@@ -83,7 +83,7 @@ export default function Pricing() {
       </div>
 
       <RevealOnScroll delay={0.3} className="mt-6">
-        <div className="p-5 border border-[rgba(0,229,255,0.1)] bg-[rgba(255,255,255,0.02)]">
+        <div className="p-5 rounded-xl bg-surface-container-low">
           <p className="font-mono text-[11.5px] text-[#8899bb] leading-[2]">
             <span className="text-[#39ff85]">{"// nota"}</span>
             {"  "}

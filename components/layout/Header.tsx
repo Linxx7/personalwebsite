@@ -63,39 +63,60 @@ export default function Header() {
         initial={false}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 md:px-12 py-4 transition-all duration-300 ${
-          scrolled
-            ? "bg-[rgba(10,14,26,0.92)] backdrop-blur-xl border-b border-[rgba(0,229,255,0.1)]"
-            : "bg-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center gap-6 px-6 md:px-8 h-20 transition-all duration-300 bg-surface-obsidian/75 backdrop-blur-xl ${
+          scrolled ? "shadow-[0_1px_12px_rgba(0,0,0,0.35)]" : ""
         }`}
       >
-        <Link
-          href="/"
-          className="font-mono text-[16px] font-bold text-[#00e5ff] tracking-[0.12em] hover:text-white transition-colors"
-          style={{ textShadow: "0 0 18px rgba(0,229,255,0.5)" }}
-        >
-          ricardo.dev.br
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/" className="group flex items-center gap-2">
+            <span className="w-9 h-9 rounded bg-surface-elevated flex items-center justify-center text-primary group-hover:text-primary-container transition-colors shadow-[0_0_15px_-3px_rgba(0,229,255,0.2)]">
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="font-inter font-semibold text-[18px] text-text-primary tracking-tight group-hover:text-primary transition-colors">
+                ricardo<span className="text-primary-container">.dev.br</span>
+              </span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-text-muted">Full Stack &amp; Games</span>
+            </span>
+          </Link>
+          <div className="hidden xl:flex items-center gap-1 bg-surface-elevated/90 px-3 py-1 rounded-full">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-emerald opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-status-emerald" />
+            </span>
+            <span className="font-mono text-[12px] text-text-muted ml-1">Disponível para projetos</span>
+          </div>
+        </div>
 
         {/* Desktop nav */}
-        <nav aria-label="Navegação principal" className="hidden md:flex items-center gap-8">
+        <nav aria-label="Navegação principal" className="hidden lg:flex items-center gap-1 bg-surface-obsidian/60 p-1 rounded-full shadow-[inset_0_1px_4px_rgba(0,0,0,0.4)]">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="font-mono text-[12px] text-[#8899bb] hover:text-[#00e5ff] transition-colors duration-200 tracking-widest uppercase"
+              className="px-4 py-1 rounded-full font-inter text-[13px] text-on-surface-variant hover:text-on-surface hover:bg-surface-elevated transition-all duration-200 capitalize"
             >
               {link.label}
             </Link>
           ))}
-          <a
-            href="#contact"
-            className="font-mono text-[11px] font-bold px-4 py-2 border border-[rgba(0,229,255,0.4)] text-[#00e5ff] hover:bg-[rgba(0,229,255,0.08)] transition-all duration-200 tracking-widest uppercase"
-          >
-            Contato
-          </a>
         </nav>
 
+        <div className="hidden md:flex items-center gap-2">
+          <a
+            href="/cv-ricardo.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex px-4 py-2 rounded font-mono text-[12px] bg-surface-elevated text-text-primary hover:text-primary transition-all duration-200"
+          >
+            Baixar CV
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex px-4 py-2 rounded font-mono text-[12px] font-semibold bg-gradient-to-r from-primary-container to-secondary text-surface-obsidian hover:shadow-[0_0_25px_-5px_rgba(0,229,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+          >
+            Falar comigo
+          </a>
+        </div>
         {/* Mobile hamburger */}
         <button
           ref={menuButtonRef}

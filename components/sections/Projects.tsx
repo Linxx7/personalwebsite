@@ -48,7 +48,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
       }}
     >
       <div
-        className="group relative flex flex-col h-full rounded-xl border border-white/5 bg-[#0f1628] overflow-hidden transition-all duration-300 hover:border-white/10"
+        className="group relative flex flex-col h-full rounded-xl bg-surface-container-low shadow-lg overflow-hidden transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,229,255,0.15)]"
         style={{ "--glow": style.glow } as React.CSSProperties}
         onMouseEnter={(e) =>
           (e.currentTarget.style.boxShadow = `0 0 32px ${style.glow}`)
@@ -82,7 +82,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           )}
 
           {/* Bottom fade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1628] via-[#0f1628]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-surface-container-low/20 to-transparent" />
 
           {/* Category badge */}
           <span
@@ -129,11 +129,11 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
         </div>
 
         {/* Content */}
-        <div className="flex flex-col flex-1 p-5 gap-3">
-          <h3 className="font-sans font-bold text-[0.95rem] text-[#e8f0fe] leading-snug">
+        <div className="flex flex-col flex-1 p-6 gap-3">
+          <h3 className="font-sans font-semibold text-[24px] leading-8 tracking-[-0.01em] text-text-primary group-hover:text-primary transition-colors">
             {project.title}
           </h3>
-          <p className="font-sans text-[14px] text-[#8899bb] leading-[1.65] flex-1">
+          <p className="font-inter text-[15px] text-text-muted leading-6 flex-1">
             {project.description}
           </p>
 
@@ -142,7 +142,7 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
             {project.tech.map((t) => (
               <span
                 key={t}
-                className="px-2 py-0.5 rounded font-mono text-[10px] text-[#8899bb] bg-white/[0.04] border border-white/[0.06]"
+                className="px-2 py-0.5 rounded font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted bg-surface-elevated"
               >
                 {t}
               </span>
@@ -150,8 +150,8 @@ function ProjectCard({ project, index }: { project: ProjectItem; index: number }
           </div>
 
           {project.caseStudy && (
-            <details className="mt-1 border-t border-white/[0.07] pt-3">
-              <summary className="cursor-pointer list-none font-mono text-[11px] font-bold tracking-wider text-[#00e5ff] hover:text-white [&::-webkit-details-marker]:hidden">
+            <details className="mt-1 p-3 rounded bg-surface-container">
+              <summary className="cursor-pointer list-none font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-primary hover:text-white [&::-webkit-details-marker]:hidden">
                 Ver estudo de caso <span aria-hidden="true">＋</span>
               </summary>
               <dl className="mt-4 space-y-4 border-l border-[rgba(0,229,255,0.2)] pl-4">
@@ -221,12 +221,12 @@ export default function Projects() {
     active === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
   return (
-    <section id="projects" className="py-24 px-6 md:px-12 max-w-5xl mx-auto">
+    <section id="projects" className="py-20 px-6 md:px-8 max-w-[1280px] mx-auto">
       <RevealOnScroll>
-        <p className="section-label font-mono text-[11px] text-[#00e5ff] tracking-[0.22em] uppercase mb-2">
+        <p data-n="01" className="section-label font-mono text-[12px] font-semibold text-primary-container tracking-[0.08em] uppercase mb-2">
           portfólio
         </p>
-        <h2 className="font-sans font-bold text-[2rem] text-[#e8f0fe] mb-3">
+        <h2 className="font-sans font-bold text-[36px] leading-[44px] tracking-[-0.02em] text-text-primary mb-3">
           Projetos selecionados
         </h2>
         <p className="max-w-2xl font-sans text-[15px] leading-relaxed text-[#8899bb] mb-8">
@@ -238,7 +238,7 @@ export default function Projects() {
       {/* Filter tabs */}
       <RevealOnScroll delay={0.1}>
         <div
-          className="flex gap-2 flex-wrap mb-10"
+          className="inline-flex gap-1 flex-wrap p-1 rounded-full bg-surface-container-high mb-10"
           role="group"
           aria-label="Filtrar projetos"
         >
@@ -247,10 +247,10 @@ export default function Projects() {
               key={f.key}
               onClick={() => setActive(f.key)}
               aria-pressed={active === f.key}
-              className={`px-4 py-1.5 rounded-full font-mono text-[11px] tracking-widest uppercase transition-all duration-200 border ${
+              className={`px-4 py-1.5 rounded-full font-mono text-[12px] transition-all duration-200 ${
                 active === f.key
-                  ? "bg-[#00e5ff]/10 text-[#00e5ff] border-[#00e5ff]/40"
-                  : "text-[#8899bb] border-white/10 hover:border-white/20 hover:text-[#e8f0fe]"
+                  ? "bg-primary text-on-primary"
+                  : "text-text-muted hover:text-text-primary"
               }`}
             >
               {f.label}
@@ -260,7 +260,7 @@ export default function Projects() {
       </RevealOnScroll>
 
       {/* Grid */}
-      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
           {filtered.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />

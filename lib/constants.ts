@@ -95,7 +95,7 @@ export type ExpItem = {
 
 export const EXPERIENCE: ExpItem[] = [
   {
-    period: "2026 · atual",
+    period: "2026 · até março",
     title: "Desenvolvedor Full Stack",
     company: "Lufe Mídias · Remoto",
     bullets: [
@@ -155,6 +155,24 @@ export type ProjectItem = {
 };
 
 export const PROJECTS: ProjectItem[] = [
+  {
+    title: "DF Pra Frente",
+    description:
+      "Site institucional de movimento social pelo desenvolvimento do Distrito Federal, com projetos sociais, matérias e colunas, e formulário de cadastro de voluntários e apoiadores por Região Administrativa.",
+    category: "web",
+    tech: ["React", "Vite", "Tailwind", "TypeScript"],
+    image: "/projects/df-pra-frente.png",
+    year: "2026",
+    demo: "https://www.dfprafrente.com.br/",
+    caseStudy: {
+      context:
+        "Reunir em um só lugar a apresentação do movimento, os projetos sociais e a captação de voluntários e apoiadores no DF.",
+      delivery:
+        "SPA em React com projetos em modais interativos, seção de matérias e colunas e formulário com máscara de telefone, seleção de RA e consentimento LGPD.",
+      evidence:
+        "Projeto mais recente, em produção em dfprafrente.com.br.",
+    },
+  },
   {
     title: "Salão Tininha",
     description:

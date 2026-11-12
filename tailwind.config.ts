@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -20,10 +20,28 @@ const config: Config = {
           3: "#7b61ff",
         },
         "text-base": "#e8f0fe",
+        primary: { DEFAULT: "#c3f5ff", container: "#00e5ff" },
+        secondary: { DEFAULT: "#7bd0ff", container: "#00a6e0" },
+        tertiary: { DEFAULT: "#afffbc", fixed: "#64ff92", "fixed-dim": "#00e470", container: "#17ef77" },
+        surface: {
+          DEFAULT: "#0f131f",
+          obsidian: "#0A0E1A",
+          elevated: "#0F172A",
+          "container-low": "#171b28",
+          container: "#1b1f2c",
+          "container-high": "#262a37",
+        },
+        "on-primary": "#00363d",
+        "on-surface": "#dfe2f3",
+        "on-surface-variant": "#bac9cc",
+        "text-primary": "#F8FAFC",
+        "text-muted": "#94A3B8",
+        "status-emerald": "#10B981",
         muted: "#8899bb",
       },
       fontFamily: {
         sans: ["var(--font-syne)", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"],
       },
       animation: {
@@ -42,3 +60,4 @@ const config: Config = {
 };
 
 export default config;
+
